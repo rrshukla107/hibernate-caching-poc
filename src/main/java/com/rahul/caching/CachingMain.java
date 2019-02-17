@@ -1,24 +1,35 @@
 package com.rahul.caching;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class CachingMain {
 
-	private static final String PERSISTENCE_UNIT_NAME = "caching-poc-persistance";
-	private static EntityManagerFactory factory;
-
 	public static void main(String[] args) {
-		factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-		EntityManager em = factory.createEntityManager();
+
+//		setUp();
+
+		EntityManager em = EntityManagerFactoryHelper.getFactory().createEntityManager();
+
+		System.out.println(em.find(PersonEntity.class, 1));
+		System.out.println(em.find(PersonEntity.class, 1));
+		System.out.println(em.find(PersonEntity.class, 1));
+
+		em.close();
+
+	}
+
+	private static void setUp() {
+		EntityManager em = EntityManagerFactoryHelper.getFactory().createEntityManager();
 		em.getTransaction().begin();
-		PersonEntity person = new PersonEntity();
-		person.setName("John Doe");
-		person.setAddress("John Doe address");
-		em.persist(person);
+		for (int i = 0; i < 100; i++) {
+			PersonEntity person = new PersonEntity();
+			person.setName("Name " + i);
+			person.setAddress("Address " + i);
+			em.persist(person);
+		}
 		em.getTransaction().commit();
 		em.close();
+		EntityManagerFactoryHelper.getFactory().close();
 	}
 
 }

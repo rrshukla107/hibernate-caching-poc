@@ -2,6 +2,7 @@ package com.rahul.caching;
 
 import java.io.Serializable;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Person")
+@Cacheable
 public class PersonEntity implements Serializable {
 
 	private static final long serialVersionUID = 4842634370056104196L;
